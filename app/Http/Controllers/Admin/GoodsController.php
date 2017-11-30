@@ -59,35 +59,30 @@ class GoodsController extends Controller
      */
     public function store(Request $request)
     {
- //       "goodsname" => "手及"
-//  "localsale" => "110"
-//  "marksale" => "120"
-//  "optionsRadios" => "option1"
-//  "is_promote" => "1"
-//  "goodsdetails" => "阿斯顿发送到"
+
         $goods=$request->all();
-
         $addgoods=new Goods();
-
         $addgoods->name=$goods['goodsname'];
         $addgoods->price=$goods['localsale'];
         //分类ID
         $addgoods->goods_cates_id=$goods['cate'];
-
         $addgoods->repertory='100';
         $addgoods->status=$goods['optionsRadios'];
         $addgoods->is_top='1';
         //是否促销
         $addgoods->is_promote=((isset($goods['is_promote']))?$goods['is_promote']:"0");
-        $addgoods->promote_price=((isset($goods['promote_price']))?$goods['promote_price']:"");
+        $addgoods->promote_price=((isset($goods['promote_price']))?$goods['promote_price']:"0");
         $addgoods->content=$goods['goodsdetails'];
-
         //图片上传
-        dd($request->hasFile('img'));
         if ($request->hasFile('img')){
-            $path=$request->img->store('./Uploads/goods');
-            dd($path);
-
+            //文件名存放目录
+            $path='./Uploads/goods';
+            //获取文件后缀
+            $suffix=$request->file('img')->getClientOriginalExtension();
+            //重命名文件然后上传
+            $fileName=time().rand(10000,99999).'.'.$suffix;
+            $request->file('img')->move($path,$fileName);
+            $addgoods->img=trim($path.'/'.$fileName,'.');
         }
         if ($addgoods->save()){
             return redirect('/jump')->with(['message'=>'添加成功','url'=>'admin/goods','jumpTime'=>'2','status'=>true]);

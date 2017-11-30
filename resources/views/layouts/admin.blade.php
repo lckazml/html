@@ -444,8 +444,10 @@
 <script src="{{asset('Admin/js/retina.js')}}"></script>
 
 <script src="{{asset('Admin/js/custom.js')}}"></script>
+
 @section('script')
     @show
+
 <!-- end: JavaScript-->
 
 </body>

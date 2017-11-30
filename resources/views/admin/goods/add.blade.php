@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="box-content">
-                <form class="form-horizontal" action="/admin/goods" method="post" >
+                <form class="form-horizontal" id="myform" action="/admin/goods"  method="post" enctype="multipart/form-data" >
 
                     <fieldset>
                         <div class="control-group">
@@ -51,7 +51,7 @@
                         <div class="control-group">
                             <label class="control-label">商品图片</label>
                             <div class="controls">
-                                    <input type="file" name="img">
+                                    <input type="file" id="img" name="img">
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@
                         <div class="control-group">
                             <label class="control-label" for="focusedInput">库存</label>
                             <div class="controls">
-                                <input class="input-xlarge focused" id="marksale" name="repertory" type="text" value="0">
+                                <input class="input-xlarge focused" id="repertory" name="repertory" type="text" value="0">
                             </div>
                         </div>
                         <div class="control-group">
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            {{csrf_field()}}
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-primary">提   交</button>
                             <button type="reset" class="btn">取 消</button>
                         </div>
@@ -132,7 +132,62 @@
     @endsection
 @section('script')
     <script>
+        (function (){
+            var form=document.getElementById('myform');
+            function next(event) {
+                if (document.getElementById('typeahead').value==""){
+                    alert('商品名不能为空');
+                    document.getElementById('typeahead').focus();
+                    event.preventDefault();
+                    return false;
+                }
+                if (document.getElementById('img').value==""){
+                    alert('上传图片不能为空');
+                    event.preventDefault();
+                    return false;
+                }
+                if (document.getElementById('localsale').value=="0"){
+                    alert('商品售价不能为0');
+                    document.getElementById('localsale').focus();
+                    event.preventDefault();
+                    return false;
+                }
+                var regular=/^([1-9]{1})\d/;
+                if(!regular.test(document.getElementById('localsale').value)){
+                    alert('商品售价只能为数字');
+                    document.getElementById('localsale').focus()
+                    event.preventDefault();
+                    return false;
+                }
+                if (document.getElementById('marksale').value=="0"){
+                    alert('市场售价不能0');
+                    document.getElementById('marksale').focus();
+                    event.preventDefault();
+                    return false;
 
-
+                }
+                if (document.getElementById('repertory').value=="0"){
+                    alert('库存不能为空0');
+                    document.getElementById('repertory').focus();
+                    event.preventDefault();
+                    return false;
+                }
+                if (document.getElementById('textarea2').value==""){
+                    alert('请对商品进行描述');
+                    document.getElementById('textarea2').focus();
+                    event.preventDefault();
+                    return false;
+                }
+            }
+            form.addEventListener('submit',next,false);
+            /*
+            img 图片
+             localsale 本店售价
+             marksale 市场售价
+             repertory 库存
+             textarea2 商品描述
+            */
+        }());
     </script>
+
     @endsection

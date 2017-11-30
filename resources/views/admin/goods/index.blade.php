@@ -25,6 +25,7 @@
                     <tr>
                         <th>商品名称</th>
                         <th>商品价格</th>
+                        <th>商品图片</th>
                         <th>分类</th>
                         <th>上下架</th>
                         <th>存库</th>
@@ -37,6 +38,7 @@
 
                         <td class="center">{{$v->name}}</td>
                         <td class="center">{{$v->price}}</td>
+                        <td class="center"><img src="{{$v->img}}" style="margin: 0 auto" width="100px"  ></td>
                         <td class="center">{{$v->cate->name}}</td>
                         <td class="center">
 
